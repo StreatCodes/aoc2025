@@ -8,7 +8,7 @@ let runInstructions = """
     """
 
 enum Puzzle: String {
-    case day1_1, day1_2, day2_1, day2_2
+    case day1_1, day1_2, day2_1, day2_2, day3_1, day3_2
 }
 
 @main
@@ -24,6 +24,8 @@ struct aoc25 {
         case .day1_2: day1_2()
         case .day2_1: day2_1()
         case .day2_2: day2_2()
+        case .day3_1: day3_1()
+        case .day3_2: day3_2()
         case nil: print(runInstructions)
         }
     }
