@@ -7,10 +7,6 @@ let runInstructions = """
       <puzzle>    The puzzle to run formatted as day_part e.g. day1_1
     """
 
-enum Puzzle: String {
-    case day1_1, day1_2, day2_1, day2_2, day3_1, day3_2
-}
-
 @main
 struct aoc25 {
     static func main() {
@@ -18,15 +14,14 @@ struct aoc25 {
             return print(runInstructions)
         }
 
-        let puzzle = Puzzle(rawValue: CommandLine.arguments[1])
-        switch puzzle {
-        case .day1_1: day1_1()
-        case .day1_2: day1_2()
-        case .day2_1: day2_1()
-        case .day2_2: day2_2()
-        case .day3_1: day3_1()
-        case .day3_2: day3_2()
-        case nil: print(runInstructions)
+        switch CommandLine.arguments[1] {
+        case "day1_1": day1_1()
+        case "day1_2": day1_2()
+        case "day2_1": day2_1()
+        case "day2_2": day2_2()
+        case "day3_1": day3_1()
+        case "day3_2": day3_2()
+        default: print(runInstructions)
         }
     }
 }
