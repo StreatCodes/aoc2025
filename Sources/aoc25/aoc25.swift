@@ -27,6 +27,8 @@ struct aoc25 {
         case "day5_2": day5_2()
         case "day6_1": day6_1()
         case "day6_2": day6_2()
+        case "day7_1": day7_1()
+        case "day7_2": day7_2()
         default: print(runInstructions)
         }
     }
