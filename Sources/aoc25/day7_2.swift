@@ -1,11 +1,11 @@
 import Foundation
 
-struct Coordinate: Hashable {
+private struct Coordinate: Hashable {
     var line: Int
     var column: Int
 }
 
-func countTimelines(
+private func countTimelines(
     _ cache: inout [Coordinate: Int], lines: [[Substring.Element]], lineIndex: Int, i: Int
 ) -> Int {
     let line = lines[lineIndex]
