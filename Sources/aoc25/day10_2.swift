@@ -29,6 +29,7 @@ private struct Manual {
                 joltages = parseJoltages(part)
             }
         }
+        buttons.sort(by: { a, b in a.togglers.count > b.togglers.count })
     }
 
     func parseRequiredState(_ text: String.SubSequence) -> [Bool] {
@@ -53,7 +54,48 @@ private struct Manual {
     }
 }
 
-// private func solveJoltages()
+enum SolveError: Error {
+    case CouldNotSolve
+}
+
+private func solveRemaining(buttons: [Button], remainingJoltages: [Int]) throws -> Int {
+    // for negator in 0..<remainingJoltages.max()! {
+    for (index, button) in buttons.enumerated() {
+        var maxConsume = 99999
+        var newJoltages = remainingJoltages
+        for toggle: Int in button.togglers {
+            if newJoltages[toggle] < maxConsume {
+                maxConsume = newJoltages[toggle]
+            }
+        }
+
+        // maxConsume -= negator  //Handles partial solves
+
+        if maxConsume > 0 && maxConsume < 99999 {
+            for toggle: Int in button.togglers {
+                newJoltages[toggle] -= maxConsume
+            }
+            var newButtons = buttons
+            newButtons.remove(at: index)
+
+            if newJoltages.max()! == 0 {
+                print(newJoltages)
+                return maxConsume
+            }
+
+            do {
+                let count = try solveRemaining(
+                    buttons: newButtons, remainingJoltages: newJoltages)
+                return count + maxConsume
+            } catch {
+                //continue.
+            }
+        }
+    }
+    // }
+
+    throw SolveError.CouldNotSolve
+}
 
 func day10_2() {
     let fileURL = URL(filePath: "inputs/day10.txt")
@@ -61,29 +103,19 @@ func day10_2() {
     let lines = input.split(separator: "\n", omittingEmptySubsequences: false)
 
     let manuals = lines.map { line in Manual(line) }
-    _ = manuals
 
-    // var totalPresses = 0
-    // for manual in manuals {
-    //     let baseState = [Int](repeating: 0, count: manual.requiredState.count)
-    //     var tree = Tree()
+    var totalPresses = 0
+    for manual in manuals {
+        do {
+            let presses = try solveRemaining(
+                buttons: manual.buttons, remainingJoltages: manual.joltages)
 
-    //     var presses = 0
-    //     while true {
-    //         let isSolved = tree.solveNext(
-    //             requiredState: manual.joltages, buttons: manual.buttons)
-    //         presses += 1
-    //         print("Pressed \(presses) times. variations \(tree.levels.last!.states.count)")
+            print("required \(presses)")
+            totalPresses += presses
+        } catch {
+            print("Could not solve \(manual.joltages)")
+        }
+    }
 
-    //         if isSolved {
-    //             break
-    //         }
-    //     }
-
-    //     print("required \(presses)")
-    //     totalPresses += presses
-    // }
-
-    // print("Total machine presses \(totalPresses)")
-    print("Incomplete")
+    print("Total machine presses \(totalPresses)")
 }
